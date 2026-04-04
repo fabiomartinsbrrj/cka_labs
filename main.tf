@@ -2,21 +2,6 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-data "aws_ami" "ubuntu_2204" {
-  most_recent = true
-  owners      = ["099720109477"] # Canonical
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
 resource "aws_vpc" "this" {
   cidr_block           = "10.20.0.0/16"
   enable_dns_hostnames = true
@@ -50,7 +35,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
 
   route {
-    cidr_block = "${local.my_ip}/32" //"0.0.0.0/0"
+    cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.this.id
   }
 
@@ -77,8 +62,22 @@ resource "aws_security_group" "lab" {
     cidr_blocks = [var.allowed_ssh_cidr != null ? var.allowed_ssh_cidr : "${local.my_ip}/32"]
   }
 
-  # (Opcional) Se você for usar kubeadm/k8s entre os nós,
-  # você pode abrir tudo dentro do SG:
+  ingress {
+    description = "Kubernetes API"
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = [var.allowed_ssh_cidr != null ? var.allowed_ssh_cidr : "${local.my_ip}/32"]
+  }
+
+  ingress {
+    description = "NodePort services"
+    from_port   = 30000
+    to_port     = 32767
+    protocol    = "tcp"
+    cidr_blocks = [var.allowed_ssh_cidr != null ? var.allowed_ssh_cidr : "${local.my_ip}/32"]
+  }
+
   ingress {
     description = "All traffic within SG"
     from_port   = 0
@@ -102,7 +101,7 @@ resource "aws_security_group" "lab" {
 
 resource "aws_instance" "nodes" {
   count         = var.instances
-  ami           = data.aws_ami.ubuntu_2204.id
+  ami           = data.aws_ssm_parameter.ubuntu_2204_ami.value
   instance_type = var.instance_type
   subnet_id     = aws_subnet.public.id
   key_name      = var.key_name
