@@ -74,7 +74,36 @@ brew install jq
 make help
 ```
 
-### 5. Conectar via SSH às instâncias
+### 5. Acessar o cluster a partir da sua máquina
+
+```bash
+# Descobrir o IP do controlplane
+terraform output nodes
+
+# Copiar o kubeconfig do controlplane
+scp -i ~/workspace/cka-key.pem \
+  ubuntu@<IP_CONTROLPLANE>:/home/ubuntu/.kube/config \
+  ~/workspace/cka-kubeconfig.yaml
+
+# Substituir o IP privado pelo IP público no kubeconfig
+sed -i 's|https://10\..*:6443|https://<IP_CONTROLPLANE>:6443|' ~/workspace/cka-kubeconfig.yaml
+
+# Remover certificate-authority-data e habilitar insecure (necessário pois o cert usa IP privado)
+kubectl --kubeconfig ~/workspace/cka-kubeconfig.yaml \
+  config set-cluster kubernetes --certificate-authority=""
+kubectl --kubeconfig ~/workspace/cka-kubeconfig.yaml \
+  config set-cluster kubernetes --insecure-skip-tls-verify=true
+
+# Apontar kubectl para o cluster AWS
+export KUBECONFIG=~/workspace/cka-kubeconfig.yaml
+
+# Verificar os nós
+kubectl get nodes -o wide
+```
+
+> **Nota:** o `--insecure-skip-tls-verify` é necessário porque o certificado do API server é gerado com o IP privado. A partir do próximo cluster criado com `make full`, o certificado já incluirá o IP público automaticamente (corrigido em `fase2-control.sh`).
+
+### 6. Conectar via SSH às instâncias
 
 Após a execução bem-sucedida do Terraform, você verá os IPs públicos das instâncias nos outputs:
 
