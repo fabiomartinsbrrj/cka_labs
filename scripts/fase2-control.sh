@@ -2,7 +2,8 @@
 set -euo pipefail
 
 echo "==> [fase2-control] Inicializando cluster com kubeadm..." >&2
-kubeadm init 2>&1 | tee /tmp/kubeadm-init.log >&2
+PUBLIC_IP=$(curl -s https://checkip.amazonaws.com)
+kubeadm init --apiserver-cert-extra-sans="$PUBLIC_IP" 2>&1 | tee /tmp/kubeadm-init.log >&2
 
 echo "==> [fase2-control] Configurando kubeconfig para ubuntu..." >&2
 mkdir -p /home/ubuntu/.kube
