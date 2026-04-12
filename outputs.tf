@@ -2,6 +2,10 @@ output "public_ips" {
   value = [for i in aws_instance.nodes : i.public_ip]
 }
 
+output "private_ips" {
+  value = [for i in aws_instance.nodes : i.private_ip]
+}
+
 output "ssh_commands" {
   value = [
     for i in aws_instance.nodes :

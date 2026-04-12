@@ -1,0 +1,19 @@
+regions:
+  - us-east-1
+  - global
+
+account-blocklist:
+  - "PROD_ACCOUNT_ID"  # substitua pelo ID da sua conta de produção
+
+accounts:
+  "LAB_ACCOUNT_ID":  # substitua pelo ID da sua conta de lab
+    filters:
+      IAMUser:
+        - "SEU_USUARIO"  # substitua pelo seu usuário IAM principal
+      IAMRole:
+        - type: glob
+          value: "AWSReserved*"
+        - "OrganizationAccountAccessRole"
+      IAMPolicy:
+        - type: contains
+          value: "AWS"
