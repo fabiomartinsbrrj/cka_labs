@@ -42,7 +42,39 @@ terraform plan -var="key_name=cka-key"
 terraform apply -auto-approve -var="key_name=cka-key"
 ```
 
-### 4. Conectar via SSH às instâncias
+### 4. Configurar o cluster Kubernetes com o Makefile
+
+Após o `terraform apply`, use o Makefile para automatizar o setup:
+
+```bash
+# Setup completo (fase1 + fase2):
+make full KEY=~/workspace/cka-key.pem
+
+# Ou em etapas separadas:
+make fase1 KEY=~/workspace/cka-key.pem   # instala containerd, kubeadm, kubelet, kubectl
+make fase2 KEY=~/workspace/cka-key.pem   # inicializa o cluster (kubeadm init + Cilium + join)
+
+# Para não repetir o KEY toda vez:
+export KEY=~/workspace/cka-key.pem
+make full
+```
+
+**Pré-requisito:** `jq` instalado localmente (usado para parsear o output do Terraform).
+
+```bash
+# Ubuntu/Debian:
+sudo apt-get install -y jq
+
+# Mac:
+brew install jq
+```
+
+**Ver todos os targets:**
+```bash
+make help
+```
+
+### 5. Conectar via SSH às instâncias
 
 Após a execução bem-sucedida do Terraform, você verá os IPs públicos das instâncias nos outputs:
 
