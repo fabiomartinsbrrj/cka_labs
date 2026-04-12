@@ -2,7 +2,7 @@ KEY ?= $(HOME)/workspace/cka-key.pem
 SSH  := ssh -i $(KEY) -o StrictHostKeyChecking=no -o ConnectTimeout=10 ubuntu@
 
 .DEFAULT_GOAL := help
-.PHONY: help fase1 fase2 full
+.PHONY: help fase1 fase2 full kubeconfig
 
 help: ## Mostra os targets disponíveis
 	@grep -E '^[a-zA-Z0-9_-]+:.*## .*$$' $(MAKEFILE_LIST) | \
@@ -42,3 +42,17 @@ fase2: ## Inicializa o cluster Kubernetes (kubeadm init + Cilium + join dos work
 	$(SSH)$$CONTROL_IP 'kubectl get nodes'
 
 full: fase1 fase2 ## Executa fase1 e fase2 (setup completo do cluster)
+
+kubeconfig: ## Baixa e configura o kubeconfig do controlplane (~/.workspace/cka-kubeconfig.yaml)
+	@set -e; \
+	CONTROL_IP=$$(terraform output -json public_ips | jq -r '.[0]'); \
+	KUBECONFIG_PATH=$(HOME)/workspace/cka-kubeconfig.yaml; \
+	echo "==> Baixando kubeconfig do controlplane ($$CONTROL_IP)..."; \
+	scp -i $(KEY) -o StrictHostKeyChecking=no ubuntu@$$CONTROL_IP:/home/ubuntu/.kube/config $$KUBECONFIG_PATH; \
+	echo "==> Substituindo IP privado pelo IP público..."; \
+	sed -i "s|https://10\.[^:]*:6443|https://$$CONTROL_IP:6443|" $$KUBECONFIG_PATH; \
+	echo "==> Configurando acesso sem TLS verify..."; \
+	kubectl --kubeconfig $$KUBECONFIG_PATH config set-cluster kubernetes --certificate-authority=""; \
+	kubectl --kubeconfig $$KUBECONFIG_PATH config set-cluster kubernetes --insecure-skip-tls-verify=true; \
+	echo "==> Kubeconfig salvo em $$KUBECONFIG_PATH"; \
+	echo "==> Execute: export KUBECONFIG=$$KUBECONFIG_PATH"
