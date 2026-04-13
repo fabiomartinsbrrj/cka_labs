@@ -114,7 +114,7 @@ resource "aws_instance" "nodes" {
   }
 
   tags = {
-    Name = format("%s-node-%02d", var.name_prefix, count.index + 1)
+    Name = count.index == 0 ? "controlplane" : format("node%02d", count.index)
     Lab  = "cka"
   }
 }

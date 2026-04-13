@@ -6,7 +6,7 @@ Este projeto cria uma infraestrutura na AWS para estudos do Certified Kubernetes
 
 - AWS CLI configurado com credenciais válidas
 - Terraform instalado (versão >= 1.0)
-- Acesso à região `sa-east-1` na AWS
+- Acesso à região `us-east-1` na AWS
 
 ## 🚀 Como usar
 
@@ -15,8 +15,8 @@ Este projeto cria uma infraestrutura na AWS para estudos do Certified Kubernetes
 Primeiro, você precisa criar um key pair na AWS para acessar as instâncias EC2:
 
 ```bash
-# Criar o key pair na região sa-east-1
-aws ec2 create-key-pair --key-name cka-key --region sa-east-1 --query 'KeyMaterial' --output text > ~/workspace/cka-key.pem
+# Criar o key pair na região us-east-1
+aws ec2 create-key-pair --key-name cka-key --region us-east-1 --query 'KeyMaterial' --output text > ~/workspace/cka-key.pem
 
 # Definir permissões corretas para a chave privada
 chmod 400 ~/workspace/cka-key.pem
@@ -26,7 +26,7 @@ chmod 400 ~/workspace/cka-key.pem
 
 ```bash
 # Listar key pairs na região
-aws ec2 describe-key-pairs --region sa-east-1
+aws ec2 describe-key-pairs --region us-east-1
 ```
 
 ### 3. Executar o Terraform
@@ -42,7 +42,39 @@ terraform plan -var="key_name=cka-key"
 terraform apply -auto-approve -var="key_name=cka-key"
 ```
 
-### 4. Conectar via SSH às instâncias
+### 4. Configurar o cluster Kubernetes com o Makefile
+
+Após o `terraform apply`, use o Makefile para automatizar o setup:
+
+```bash
+# Setup completo (fase1 + fase2):
+make full KEY=~/workspace/cka-key.pem
+
+# Ou em etapas separadas:
+make fase1 KEY=~/workspace/cka-key.pem   # instala containerd, kubeadm, kubelet, kubectl
+make fase2 KEY=~/workspace/cka-key.pem   # inicializa o cluster (kubeadm init + Cilium + join)
+
+# Para não repetir o KEY toda vez:
+export KEY=~/workspace/cka-key.pem
+make full
+```
+
+**Pré-requisito:** `jq` instalado localmente (usado para parsear o output do Terraform).
+
+```bash
+# Ubuntu/Debian:
+sudo apt-get install -y jq
+
+# Mac:
+brew install jq
+```
+
+**Ver todos os targets:**
+```bash
+make help
+```
+
+### 5. Conectar via SSH às instâncias
 
 Após a execução bem-sucedida do Terraform, você verá os IPs públicos das instâncias nos outputs:
 
@@ -350,7 +382,7 @@ Após a execução, o Terraform exibirá:
 
 ### Erro: "The key pair 'X' does not exist"
 
-- Verifique se o key pair foi criado na região correta (`sa-east-1`)
+- Verifique se o key pair foi criado na região correta (`us-east-1`)
 - Use o comando de verificação mencionado no passo 2
 
 ### Erro: "Incorrect attribute value type"
