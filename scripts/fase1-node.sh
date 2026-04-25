@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+NODE_HOSTNAME="${1:-}"
+if [ -n "$NODE_HOSTNAME" ]; then
+  echo "==> [fase1] Configurando hostname para $NODE_HOSTNAME..."
+  hostnamectl set-hostname "$NODE_HOSTNAME"
+fi
+
 echo "==> [fase1] Atualizando pacotes..."
 apt-get update -y
 

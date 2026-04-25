@@ -20,10 +20,13 @@ fase1: ## Instala containerd, kubeadm, kubelet e kubectl em todos os nós
 	CONTROL_IP=$$(terraform output -json public_ips | jq -r '.[0]'); \
 	WORKER_IPS=$$(terraform output -json public_ips | jq -r '.[1:][]'); \
 	echo "==> [fase1] Configurando controlplane ($$CONTROL_IP)..."; \
-	$(SSH)$$CONTROL_IP 'sudo bash -s' < scripts/fase1-node.sh; \
+	$(SSH)$$CONTROL_IP 'sudo bash -s controlplane' < scripts/fase1-node.sh; \
+	INDEX=1; \
 	for ip in $$WORKER_IPS; do \
-		echo "==> [fase1] Configurando worker ($$ip)..."; \
-		$(SSH)$$ip 'sudo bash -s' < scripts/fase1-node.sh; \
+		WORKER_NAME=$$(printf "node%02d" $$INDEX); \
+		echo "==> [fase1] Configurando worker ($$ip) como $$WORKER_NAME..."; \
+		$(SSH)$$ip "sudo bash -s $$WORKER_NAME" < scripts/fase1-node.sh; \
+		INDEX=$$((INDEX + 1)); \
 	done; \
 	echo "==> Fase 1 concluída em todos os nós!"
 
