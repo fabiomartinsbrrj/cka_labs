@@ -3,7 +3,10 @@ output "public_ips" {
 }
 
 output "private_ips" {
-  value = [for i in aws_instance.nodes : i.private_ip]
+  value = {
+    for i in aws_instance.nodes :
+    i.tags["Name"] => i.private_ip
+  }
 }
 
 output "nodes" {

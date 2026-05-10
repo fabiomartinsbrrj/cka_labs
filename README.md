@@ -183,7 +183,7 @@ systemctl status kubelet
 # Inicializar o cluster (executar apenas no nó master)
 kubeadm init
 
-# Configurar kubectl para o usuário ubuntu
+# Configurar kubectl para o usuári
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
@@ -216,7 +216,9 @@ cilium status
 cilium install
 
 ```
-
+  "controlplane" = "ssh -i <path-da-sua-chave.pem> ubuntu@13.223.224.254"
+  "node01" = "ssh -i <path-da-sua-chave.pem> ubuntu@3.228.11.131"
+  
 ### 4. Adicionar Worker Nodes (nos demais nós)
 
 ```bash
