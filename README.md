@@ -115,7 +115,7 @@ Após conectar em instância via SSH, execute os comandos abaixo para preparar o
 ```bash
 sudo su -
 
-apt-get update -y
+
 
 # Instalar dependências básicas https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 
 apt-get install -y apt-transport-https ca-certificates curl gpg conntrack socat
@@ -124,16 +124,19 @@ apt-get install -y apt-transport-https ca-certificates curl gpg conntrack socat
 swapoff -a
 
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+# OBS Nos claudproviders não vai ter swap
 
+# ativando os modulos de kernel
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
 
-
+# carregando
 modprobe overlay
 modprobe br_netfilter
 
+# habilitando os IP forwarding
 cat <<EOF | sudo tee /etc/sysctl.d/kubernetes.conf
 net.ipv4.ip_forward = 1
 net.ipv4.conf.all.forwarding = 1
@@ -145,6 +148,8 @@ net.ipv6.conf.all.rp_filter = 0
 EOF
 
 sysctl --system
+
+apt-get update -y
 
 #Containerd 
 apt install -y containerd

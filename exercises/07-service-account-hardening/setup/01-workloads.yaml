@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: report-generator
+  namespace: jobs
+  labels:
+    app: report-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: report-generator
+  template:
+    metadata:
+      labels:
+        app: report-generator
+    spec:
+      containers:
+        - name: report-generator
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep infinity"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-reloader
+  namespace: jobs
+  labels:
+    app: config-reloader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-reloader
+  template:
+    metadata:
+      labels:
+        app: config-reloader
+    spec:
+      containers:
+        - name: config-reloader
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep infinity"]
