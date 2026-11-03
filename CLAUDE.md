@@ -51,7 +51,7 @@ All resources live in a single VPC (`10.20.0.0/16`) with one public subnet (`10.
 - `data.tf` — AMI lookup (Ubuntu 22.04 LTS via SSM) + `local.my_ip` via `checkip.amazonaws.com`
 - `main.tf` — all resources: VPC, IGW, subnet, route table, security group, EC2 instances
 - `variables.tf` / `outputs.tf` — inputs and outputs
-- `scripts/fase1-node.sh` — runs on every node: sets hostname, disables swap, configures kernel modules/sysctl, installs containerd + k8s packages v1.31
+- `scripts/fase1-node.sh` — runs on every node: sets hostname, disables swap, configures kernel modules/sysctl, installs containerd + k8s packages v1.37
 - `scripts/fase2-control.sh` — runs only on controlplane: `kubeadm init`, Cilium install, prints join command to stdout (all other output goes to stderr — the Makefile captures stdout as `JOIN_CMD`)
 
 ## Key Design Decisions
