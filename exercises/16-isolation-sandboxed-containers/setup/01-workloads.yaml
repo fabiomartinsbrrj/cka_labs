@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trusted-app
+  namespace: tenant-trusted
+  labels:
+    app: trusted-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trusted-app
+  template:
+    metadata:
+      labels:
+        app: trusted-app
+    spec:
+      containers:
+        - name: trusted-app
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep infinity"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: untrusted-app
+  namespace: tenant-untrusted
+  labels:
+    app: untrusted-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: untrusted-app
+  template:
+    metadata:
+      labels:
+        app: untrusted-app
+    spec:
+      containers:
+        - name: untrusted-app
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep infinity"]

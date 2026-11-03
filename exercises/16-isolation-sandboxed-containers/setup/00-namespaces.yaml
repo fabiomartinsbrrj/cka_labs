@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tenant-trusted
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tenant-untrusted

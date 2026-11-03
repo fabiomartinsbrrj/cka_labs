@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoice-worker
+  namespace: billing
+  labels:
+    app: invoice-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invoice-worker
+  template:
+    metadata:
+      labels:
+        app: invoice-worker
+    spec:
+      serviceAccountName: invoice-worker-sa
+      containers:
+        - name: invoice-worker
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep infinity"]
+          env:
+            - name: DB_USER
+              value: "invoice_app"
+            - name: DB_PASSWORD
+              value: "SuperSecret123!"
