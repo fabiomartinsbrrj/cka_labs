@@ -169,6 +169,11 @@ systemctl status containerd
 ### 2. Instalar kubeadm, kubelet e kubectl
 
 ```bash
+
+apt-get install -y apt-transport-https ca-certificates curl gpg conntrack socat
+
+apt-cache madison kubeadm
+
 # Adicionar chave GPG do Kubernetes
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
@@ -190,7 +195,7 @@ systemctl status kubelet
 # Inicializar o cluster (executar apenas no nó master)
 kubeadm init
 
-# Configurar kubectl para o usuári
+# Configurar kubectl para o usuário
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
