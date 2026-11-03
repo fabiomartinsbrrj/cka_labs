@@ -22,61 +22,61 @@ https://training.linuxfoundation.org/certification/certified-kubernetes-security
 
 Cada subpasta de `exercises/` mapeia **1:1** para uma competência (bullet) oficial do CKS. O número do prefixo não segue a ordem do site — segue a ordem em que os exercícios foram criados neste repo, agrupados por domínio.
 
-Status possíveis: ✅ Completo (README + setup/ + VALIDATION.md) · 🚧 Esqueleto (README stub, conteúdo pendente)
+Status: ✅ todos os 24 exercícios têm README + setup/ (quando aplicável) + VALIDATION.md completos.
 
 ### 1. Cluster Setup (15%)
 
 | Pasta | Competência | Status |
 |-------|-------------|--------|
 | [`exercises/01-cross-namespace-connectivity/`](exercises/01-cross-namespace-connectivity/) | Use Network security policies to restrict cluster level access | ✅ Completo |
-| [`exercises/02-cis-benchmark/`](exercises/02-cis-benchmark/) | Use CIS benchmark to review the security configuration of Kubernetes components | 🚧 Esqueleto |
-| [`exercises/03-ingress-tls/`](exercises/03-ingress-tls/) | Properly set up Ingress with TLS | 🚧 Esqueleto |
-| [`exercises/04-protect-node-metadata/`](exercises/04-protect-node-metadata/) | Protect node metadata and endpoints | 🚧 Esqueleto |
-| [`exercises/05-verify-platform-binaries/`](exercises/05-verify-platform-binaries/) | Verify platform binaries before deploying | 🚧 Esqueleto |
+| [`exercises/02-cis-benchmark/`](exercises/02-cis-benchmark/) | Use CIS benchmark to review the security configuration of Kubernetes components | ✅ Completo |
+| [`exercises/03-ingress-tls/`](exercises/03-ingress-tls/) | Properly set up Ingress with TLS | ✅ Completo |
+| [`exercises/04-protect-node-metadata/`](exercises/04-protect-node-metadata/) | Protect node metadata and endpoints | ✅ Completo |
+| [`exercises/05-verify-platform-binaries/`](exercises/05-verify-platform-binaries/) | Verify platform binaries before deploying | ✅ Completo |
 
 ### 2. Cluster Hardening (15%)
 
 | Pasta | Competência | Status |
 |-------|-------------|--------|
-| [`exercises/06-rbac-least-privilege/`](exercises/06-rbac-least-privilege/) | Use Role Based Access Controls to minimize exposure | 🚧 Esqueleto |
-| [`exercises/07-service-account-hardening/`](exercises/07-service-account-hardening/) | Exercise caution in using service accounts e.g. disable defaults, minimize permissions | 🚧 Esqueleto |
-| [`exercises/08-restrict-api-access/`](exercises/08-restrict-api-access/) | Restrict access to Kubernetes API | 🚧 Esqueleto |
-| [`exercises/09-kubernetes-upgrade/`](exercises/09-kubernetes-upgrade/) | Upgrade Kubernetes to avoid vulnerabilities | 🚧 Esqueleto |
+| [`exercises/06-rbac-least-privilege/`](exercises/06-rbac-least-privilege/) | Use Role Based Access Controls to minimize exposure | ✅ Completo |
+| [`exercises/07-service-account-hardening/`](exercises/07-service-account-hardening/) | Exercise caution in using service accounts e.g. disable defaults, minimize permissions | ✅ Completo |
+| [`exercises/08-restrict-api-access/`](exercises/08-restrict-api-access/) | Restrict access to Kubernetes API | ✅ Completo |
+| [`exercises/09-kubernetes-upgrade/`](exercises/09-kubernetes-upgrade/) | Upgrade Kubernetes to avoid vulnerabilities | ✅ Completo |
 
 ### 3. System Hardening (10%)
 
 | Pasta | Competência | Status |
 |-------|-------------|--------|
-| [`exercises/10-minimize-host-os-footprint/`](exercises/10-minimize-host-os-footprint/) | Minimize host OS footprint (reduce attack surface) | 🚧 Esqueleto |
-| [`exercises/11-iam-least-privilege/`](exercises/11-iam-least-privilege/) | Using least-privilege identity and access management | 🚧 Esqueleto |
-| [`exercises/12-minimize-external-access/`](exercises/12-minimize-external-access/) | Minimize external access to the network | 🚧 Esqueleto |
-| [`exercises/13-apparmor-seccomp/`](exercises/13-apparmor-seccomp/) | Appropriately use kernel hardening tools such as AppArmor, seccomp | 🚧 Esqueleto |
+| [`exercises/10-minimize-host-os-footprint/`](exercises/10-minimize-host-os-footprint/) | Minimize host OS footprint (reduce attack surface) | ✅ Completo |
+| [`exercises/11-iam-least-privilege/`](exercises/11-iam-least-privilege/) | Using least-privilege identity and access management | ✅ Completo |
+| [`exercises/12-minimize-external-access/`](exercises/12-minimize-external-access/) | Minimize external access to the network | ✅ Completo |
+| [`exercises/13-apparmor-seccomp/`](exercises/13-apparmor-seccomp/) | Appropriately use kernel hardening tools such as AppArmor, seccomp | ✅ Completo |
 
 ### 4. Minimize Microservice Vulnerabilities (20%)
 
 | Pasta | Competência | Status |
 |-------|-------------|--------|
-| [`exercises/14-pod-security-standards/`](exercises/14-pod-security-standards/) | Use appropriate pod security standards | 🚧 Esqueleto |
-| [`exercises/15-secrets-management/`](exercises/15-secrets-management/) | Manage Kubernetes secrets | 🚧 Esqueleto |
-| [`exercises/16-isolation-sandboxed-containers/`](exercises/16-isolation-sandboxed-containers/) | Understand and implement isolation techniques (multi-tenancy, sandboxed containers) | 🚧 Esqueleto |
-| [`exercises/17-pod-to-pod-encryption/`](exercises/17-pod-to-pod-encryption/) | Implement Pod-to-Pod encryption (Cilium, Istio) | 🚧 Esqueleto |
+| [`exercises/14-pod-security-standards/`](exercises/14-pod-security-standards/) | Use appropriate pod security standards | ✅ Completo |
+| [`exercises/15-secrets-management/`](exercises/15-secrets-management/) | Manage Kubernetes secrets | ✅ Completo |
+| [`exercises/16-isolation-sandboxed-containers/`](exercises/16-isolation-sandboxed-containers/) | Understand and implement isolation techniques (multi-tenancy, sandboxed containers) | ✅ Completo |
+| [`exercises/17-pod-to-pod-encryption/`](exercises/17-pod-to-pod-encryption/) | Implement Pod-to-Pod encryption (Cilium, Istio) | ✅ Completo |
 
 ### 5. Supply Chain Security (20%)
 
 | Pasta | Competência | Status |
 |-------|-------------|--------|
-| [`exercises/18-minimize-base-image-footprint/`](exercises/18-minimize-base-image-footprint/) | Minimize base image footprint | 🚧 Esqueleto |
-| [`exercises/19-supply-chain-sbom/`](exercises/19-supply-chain-sbom/) | Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories) | 🚧 Esqueleto |
-| [`exercises/20-secure-registries-sign-artifacts/`](exercises/20-secure-registries-sign-artifacts/) | Secure your supply chain (permitted registries, sign and validate artifacts) | 🚧 Esqueleto |
-| [`exercises/21-static-analysis-workloads/`](exercises/21-static-analysis-workloads/) | Perform static analysis of user workloads and container images | 🚧 Esqueleto |
+| [`exercises/18-minimize-base-image-footprint/`](exercises/18-minimize-base-image-footprint/) | Minimize base image footprint | ✅ Completo |
+| [`exercises/19-supply-chain-sbom/`](exercises/19-supply-chain-sbom/) | Understand your supply chain (e.g. SBOM, CI/CD, artifact repositories) | ✅ Completo |
+| [`exercises/20-secure-registries-sign-artifacts/`](exercises/20-secure-registries-sign-artifacts/) | Secure your supply chain (permitted registries, sign and validate artifacts) | ✅ Completo |
+| [`exercises/21-static-analysis-workloads/`](exercises/21-static-analysis-workloads/) | Perform static analysis of user workloads and container images | ✅ Completo |
 
 ### 6. Monitoring, Logging and Runtime Security (20%)
 
 | Pasta | Competência | Status |
 |-------|-------------|--------|
-| [`exercises/22-audit-logs/`](exercises/22-audit-logs/) | Use Kubernetes audit logs to monitor access | 🚧 Esqueleto |
-| [`exercises/23-runtime-threat-detection/`](exercises/23-runtime-threat-detection/) | Perform behavioral analytics to detect malicious activities; Detect threats within physical infrastructure, apps, networks, data, users and workloads; Investigate and identify phases of attack and bad actors within the environment | 🚧 Esqueleto |
-| [`exercises/24-immutable-containers-runtime/`](exercises/24-immutable-containers-runtime/) | Ensure immutability of containers at runtime | 🚧 Esqueleto |
+| [`exercises/22-audit-logs/`](exercises/22-audit-logs/) | Use Kubernetes audit logs to monitor access | ✅ Completo |
+| [`exercises/23-runtime-threat-detection/`](exercises/23-runtime-threat-detection/) | Perform behavioral analytics to detect malicious activities; Detect threats within physical infrastructure, apps, networks, data, users and workloads; Investigate and identify phases of attack and bad actors within the environment | ✅ Completo |
+| [`exercises/24-immutable-containers-runtime/`](exercises/24-immutable-containers-runtime/) | Ensure immutability of containers at runtime | ✅ Completo |
 
 > **Nota:** `23-runtime-threat-detection` consolida 3 bullets do domínio 6 porque, na prática, são exercitados juntos com a mesma ferramenta (ex: Falco) — behavioral analytics, detecção de ameaças e investigação de fases de ataque não se separam bem em exercícios distintos.
 
