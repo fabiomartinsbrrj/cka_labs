@@ -146,6 +146,8 @@ sysctl --system
 
 # Containerd
 apt install -y containerd
+
+# aqui armazena todas as config do containerd
 mkdir -p /etc/containerd
 containerd config default | tee /etc/containerd/config.toml
 sed -i 's/SystemdCgroup.*/SystemdCgroup = true/g' /etc/containerd/config.toml
@@ -157,11 +159,11 @@ systemctl status containerd
 
 ```bash
 mkdir -p /etc/apt/keyrings
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
 
 apt-get update -y
-apt-get install -y kubelet=1.31.0-1.1 kubeadm=1.31.0-1.1 kubectl=1.31.0-1.1
+apt-get install -y kubelet=1.37.1-1.1 kubeadm=1.37.1-1.1 kubectl=1.37.1-1.1
 apt-mark hold kubelet kubeadm kubectl
 
 systemctl enable --now kubelet
@@ -173,6 +175,7 @@ systemctl status kubelet
 ```bash
 kubeadm init --apiserver-cert-extra-sans="<IP_PUBLICO_DO_CONTROLPLANE>"
 
+# Configurar kubectl para o usuário
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
