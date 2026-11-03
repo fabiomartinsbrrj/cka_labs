@@ -117,7 +117,7 @@ sudo su -
 
 
 
-# Instalar dependências básicas https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 
+# Instalar dependências básicas https://v1-37.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 
 apt-get install -y apt-transport-https ca-certificates curl gpg conntrack socat
 
 # colocar restos doc comandos aqui
@@ -153,6 +153,8 @@ apt-get update -y
 
 #Containerd 
 apt install -y containerd
+
+# aqui armazena todas as config do containerd
 mkdir -p /etc/containerd
 
 containerd config default | tee /etc/containerd/config.toml
@@ -168,14 +170,14 @@ systemctl status containerd
 
 ```bash
 # Adicionar chave GPG do Kubernetes
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 # Adicionar repositório do Kubernetes
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 # Atualizar lista de pacotes e instalar
 apt-get update -y
-apt-get install -y kubelet=1.31.0-1.1 kubeadm=1.31.0-1.1 kubectl=1.31.0-1.1
+apt-get install -y kubelet=1.37.1-1.1 kubeadm=1.37.1-1.1 kubectl=1.37.1-1.1
 apt-mark hold kubelet kubeadm kubectl
 
 systemctl enable --now kubelet
@@ -299,15 +301,15 @@ systemctl status containerd
 
 apt-get install -y apt-transport-https ca-certificates curl gpg conntrack socat
 
-curl -fsSL <https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key> | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL <https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key> | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 # Adicionar repositório do Kubernetes
 
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] <https://pkgs.k8s.io/core:/stable:/v1.31/deb/> /' | tee /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] <https://pkgs.k8s.io/core:/stable:/v1.37/deb/> /' | tee /etc/apt/sources.list.d/kubernetes.list
 
 apt-get update -y
 
-apt-get install -y kubelet=1.31.0-1.1 kubeadm=1.31.0-1.1 kubectl=1.31.0-1.1
+apt-get install -y kubelet=1.37.1-1.1 kubeadm=1.37.1-1.1 kubectl=1.37.1-1.1
 apt-mark hold kubelet kubeadm kubectl
 
 systemctl enable --now kubelet
