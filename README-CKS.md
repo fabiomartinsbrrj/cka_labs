@@ -130,6 +130,7 @@ Lista de ferramentas externas ao kubeadm/Cilium básico que os exercícios acima
 ## 🔗 Referências
 
 - Domains & Competencies oficial: https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
+- [CKS-Certified-Kubernetes-Security-Specialist](https://github.com/theplatformlab/CKS-Certified-Kubernetes-Security-Specialist) (MIT) — guia de estudo de terceiros usado como referência de comandos/flags exatos (kube-bench, Falco, EncryptionConfiguration, ValidatingAdmissionPolicy) ao escrever os exercícios deste repo.
 - Kubernetes Pod Security Standards: https://kubernetes.io/docs/concepts/security/pod-security-standards/
 - Cilium Network Policy: https://docs.cilium.io/en/stable/security/policy/
 - Cilium Transparent Encryption: https://docs.cilium.io/en/stable/security/network/encryption/
