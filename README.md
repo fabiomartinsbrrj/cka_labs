@@ -1,6 +1,6 @@
 # CKA Study Lab - Infraestrutura AWS com Terraform
 
-Este projeto cria uma infraestrutura na AWS para estudos do Certified Kubernetes Administrator (CKA) usando Terraform.
+Este projeto cria uma infraestrutura na AWS para estudos do Certified Kubernetes Administrator (CKA) usando Terraform. O mesmo cluster também é usado para os exercícios de CKS (Certified Kubernetes Security Specialist) — veja [`README-CKS.md`](./README-CKS.md) e a pasta [`exercises/`](./exercises/).
 
 ## 📋 Pré-requisitos
 
@@ -99,219 +99,16 @@ ssh -i ~/workspace/cka-key.pem ubuntu@<IP_PUBLICO_NODE_1>
 ssh -i ~/workspace/cka-key.pem ubuntu@<IP_PUBLICO_NODE_2>
 ```
 
-**Exemplo:**
+Os IPs públicos reais ficam disponíveis no output `ssh_commands` do Terraform (`terraform output ssh_commands`).
 
-```bash
-ssh -i ~/workspace/cka-key.pem ubuntu@54.233.45.51
-ssh -i ~/workspace/cka-key.pem ubuntu@54.94.133.212
-```
+## 🔍 O que os scripts fazem
 
-## ⚙️ Configuração Pós-Instalação
+`make fase1` e `make fase2` automatizam exatamente o que antes era feito manualmente via SSH em cada nó. Em vez de duplicar os comandos aqui (e correr o risco de ficarem desatualizados em relação ao código real), a fonte da verdade é o próprio script:
 
-Após conectar em instância via SSH, execute os comandos abaixo para preparar o ambiente para o Kubernetes:
+- **[`scripts/fase1-node.sh`](./scripts/fase1-node.sh)** — roda em todo nó: desabilita swap, carrega os módulos de kernel (`overlay`, `br_netfilter`), configura sysctl para IP forwarding, instala `containerd` (com `SystemdCgroup=true`) e os pacotes `kubeadm`/`kubelet`/`kubectl` do repositório oficial `pkgs.k8s.io`.
+- **[`scripts/fase2-control.sh`](./scripts/fase2-control.sh)** — roda só no controlplane: `kubeadm init`, configura o kubeconfig, instala a Cilium CLI (com verificação de checksum) e o Cilium como CNI, e imprime o comando `kubeadm join` que o Makefile usa para os workers.
 
-### 1. Atualizar o sistema e instalar dependências
-
-```bash
-sudo su -
-
-
-
-# Instalar dependências básicas https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 
-apt-get install -y apt-transport-https ca-certificates curl gpg conntrack socat
-
-# colocar restos doc comandos aqui
-swapoff -a
-
-sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-# OBS Nos claudproviders não vai ter swap
-
-# ativando os modulos de kernel
-cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
-overlay
-br_netfilter
-EOF
-
-# carregando
-modprobe overlay
-modprobe br_netfilter
-
-# habilitando os IP forwarding
-cat <<EOF | sudo tee /etc/sysctl.d/kubernetes.conf
-net.ipv4.ip_forward = 1
-net.ipv4.conf.all.forwarding = 1
-net.ipv6.conf.all.forwarding = 1
-net.bridge.bridge-nf-call-iptables  = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.conf.all.rp_filter = 0
-net.ipv6.conf.all.rp_filter = 0
-EOF
-
-sysctl --system
-
-apt-get update -y
-
-#Containerd 
-apt install -y containerd
-mkdir -p /etc/containerd
-
-containerd config default | tee /etc/containerd/config.toml
-
-sed -i 's/SystemdCgroup.*/SystemdCgroup = true/g' /etc/containerd/config.toml
-
-systemctl enable --now containerd
-systemctl status containerd
-
-```
-
-### 2. Instalar kubeadm, kubelet e kubectl
-
-```bash
-# Adicionar chave GPG do Kubernetes
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
-# Adicionar repositório do Kubernetes
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-# Atualizar lista de pacotes e instalar
-apt-get update -y
-apt-get install -y kubelet=1.31.0-1.1 kubeadm=1.31.0-1.1 kubectl=1.31.0-1.1
-apt-mark hold kubelet kubeadm kubectl
-
-systemctl enable --now kubelet
-systemctl status kubelet
-```
-
-### 3. Configurar o Control Plane (apenas no primeiro nó)
-
-```bash
-# Inicializar o cluster (executar apenas no nó master)
-kubeadm init
-
-# Configurar kubectl para o usuári
-mkdir -p $HOME/.kube
-cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-chown $(id -u):$(id -g) $HOME/.kube/config
-
-export KUBECONFIG=/etc/kubernetes/admin.conf
-
-reboot
-
-# Instalar CNI (Flannel)
-# kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
-```
-
-### 4. Instalar a Cilium
-
-```bash
-# Instalar a Cilium https://docs.cilium.io/en/stable/installation/k8s-install-kubeadm/
-
-CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
-CLI_ARCH=amd64
-if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
-curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
-sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
-sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
-rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
-
-# Verificar a Cilium
-cilium status
-
-# Instalar a Cilium
-cilium install
-
-```
-  "controlplane" = "ssh -i <path-da-sua-chave.pem> ubuntu@13.223.224.254"
-  "node01" = "ssh -i <path-da-sua-chave.pem> ubuntu@3.228.11.131"
-  
-### 4. Adicionar Worker Nodes (nos demais nós)
-
-```bash
-# Executar o comando join que aparece após o kubeadm init
-# Exemplo:
-# sudo kubeadm join <IP_MASTER>:6443 --token <TOKEN> --discovery-token-ca-cert-hash sha256:<HASH>
-```
-
-### 5. Verificar o cluster
-
-```bash
-# Verificar nós
-kubectl get nodes
-
-# Verificar pods do sistema
-kubectl get pods -n kube-system
-```
-
-/etc/kubernetes/pki = Diretório com os certificados do cluster. Todos os componentes tem uma CA principal e todos eles tem uma chave privada e um certificado.
-[certs] Using certificateDir folder "/etc/kubernetes/pki"
-[certs] Generating "ca" certificate and key
-[certs] Generating "apiserver" certificate and key
-[certs] apiserver serving cert is signed for DNS names [ip-10-20-1-64 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 10.20.1.64]
-[certs] Generating "apiserver-kubelet-client" certificate and key
-[certs] Generating "front-proxy-ca" certificate and key
-[certs] Generating "front-proxy-client" certificate and key
-[certs] Generating "etcd/ca" certificate and key
-[certs] Generating "etcd/server" certificate and key
-[certs] etcd/server serving cert is signed for DNS names [ip-10-20-1-64 localhost] and IPs [10.20.1.64 127.0.0.1 ::1]
-[certs] Generating "etcd/peer" certificate and key
-[certs] etcd/peer serving cert is signed for DNS names [ip-10-20-1-64 localhost] and IPs [10.20.1.64 127.0.0.1 ::1]
-[certs] Generating "etcd/healthcheck-client" certificate and key
-[certs] Generating "apiserver-etcd-client" certificate and key
-[certs] Generating "sa" key and public key
-
-Ir no WORKER NODE e executar o comando abaixo:
-executar os mesmos comandos do master node até o kubeadm join
-
-sudo su -
-apt-get update -y
-
-cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
-overlay
-br_netfilter
-EOF
-
-modprobe overlay
-modprobe br_netfilter
-
-cat <<EOF | sudo tee /etc/sysctl.d/kubernetes.conf
-net.ipv4.ip_forward = 1
-net.ipv4.conf.all.forwarding = 1
-net.ipv6.conf.all.forwarding = 1
-net.bridge.bridge-nf-call-iptables  = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.conf.all.rp_filter = 0
-net.ipv6.conf.all.rp_filter = 0
-EOF
-
-sysctl --system
-
-# Containerd
-
-apt install -y containerd
-mkdir -p /etc/containerd
-
-containerd config default | tee /etc/containerd/config.toml
-
-sed -i 's/SystemdCgroup.*/SystemdCgroup = true/g' /etc/containerd/config.toml
-
-systemctl enable --now containerd
-systemctl status containerd
-
-apt-get install -y apt-transport-https ca-certificates curl gpg conntrack socat
-
-curl -fsSL <https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key> | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
-# Adicionar repositório do Kubernetes
-
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] <https://pkgs.k8s.io/core:/stable:/v1.31/deb/> /' | tee /etc/apt/sources.list.d/kubernetes.list
-
-apt-get update -y
-
-apt-get install -y kubelet=1.31.0-1.1 kubeadm=1.31.0-1.1 kubectl=1.31.0-1.1
-apt-mark hold kubelet kubeadm kubectl
-
-systemctl enable --now kubelet
-systemctl status kubelet
+Se precisar depurar ou rodar algum passo manualmente fora do fluxo do Makefile, leia o script correspondente em vez de copiar comandos de um README que pode ficar desatualizado.
 
 ## 🏗️ Recursos Criados
 
