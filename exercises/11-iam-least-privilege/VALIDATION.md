@@ -40,4 +40,6 @@ Expected: `get-caller-identity` succeeds (confirms the role is attached and cred
 
 ## Cleanup
 
-Nothing to clean up unless you want to revert — this is infrastructure, not a disposable lab object.
+```bash
+./cleanup.sh
+```

@@ -35,3 +35,9 @@ Expected: `fase2-control.sh` calls `verify-binary.sh`; the old inline `sha256sum
 make fase2 KEY=~/workspace/cka-key.pem
 ```
 Expected: completes successfully, Cilium installs and reports ready — the refactor didn't break the real flow.
+
+## Cleanup
+
+```bash
+./cleanup.sh
+```

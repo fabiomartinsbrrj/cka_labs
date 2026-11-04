@@ -40,5 +40,5 @@ Expected: **non-zero exit code** — AppArmor's write restriction outside `/var/
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
+./cleanup.sh
 ```

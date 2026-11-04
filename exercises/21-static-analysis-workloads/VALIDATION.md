@@ -35,5 +35,5 @@ test -f STATIC-ANALYSIS.md && echo "present"
 ## Cleanup
 
 ```bash
-rm -f baseline-scan.txt fixed-scan.txt
+./cleanup.sh
 ```

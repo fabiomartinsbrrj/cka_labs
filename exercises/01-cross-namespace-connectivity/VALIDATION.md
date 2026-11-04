@@ -46,5 +46,5 @@ Expected: **non-zero exit code** (blocked by default-deny).
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
+./cleanup.sh
 ```

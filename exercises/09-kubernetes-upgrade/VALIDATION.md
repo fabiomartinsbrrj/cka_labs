@@ -35,3 +35,9 @@ Expected: all references show the new version consistently — not a mix of old 
 kubectl version -o json | jq -r '.serverVersion.minor'
 ```
 Compare against https://kubernetes.io/releases/ — expected to be one of the three currently supported minors.
+
+## Cleanup
+
+```bash
+./cleanup.sh
+```

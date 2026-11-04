@@ -35,3 +35,9 @@ Expected: all nodes `Ready`, no errors during provisioning.
 ssh -i $KEY ubuntu@<node-ip> 'systemctl list-units --type=service --state=running | wc -l'
 ```
 Expected: lower count than the baseline you recorded before starting.
+
+## Cleanup
+
+```bash
+./cleanup.sh
+```

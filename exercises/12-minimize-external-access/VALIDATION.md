@@ -38,3 +38,9 @@ Expected: **non-zero exit code / timeout** — this port has nothing to do with 
 cilium status
 ```
 Expected: no connectivity errors, all nodes report healthy.
+
+## Cleanup
+
+```bash
+./cleanup.sh
+```

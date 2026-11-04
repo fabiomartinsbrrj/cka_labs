@@ -38,5 +38,5 @@ Expected: `SUPPLY-CHAIN.md` describes the full chain (source → base image → 
 ## Cleanup
 
 ```bash
-rm -f sbom.cdx.json sbom.spdx.json
+./cleanup.sh
 ```
