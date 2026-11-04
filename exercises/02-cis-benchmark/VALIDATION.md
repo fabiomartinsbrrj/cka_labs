@@ -36,3 +36,9 @@ Expected: the checks tied to the three fixes above now show `[PASS]`.
 ```bash
 test -f FINDINGS.md && echo "present"
 ```
+
+## Cleanup
+
+```bash
+./cleanup.sh
+```

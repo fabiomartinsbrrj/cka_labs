@@ -46,5 +46,5 @@ Expected: **non-zero exit code** — no match.
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
+./cleanup.sh
 ```

@@ -39,8 +39,5 @@ Expected: `HTTP/1.1 308 Permanent Redirect` (or `301`/`302`) with a `Location: h
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
-kubectl delete ingress storefront -n shop --ignore-not-found
-kubectl delete secret storefront-tls -n shop --ignore-not-found
-helm uninstall ingress-nginx -n ingress-nginx
+./cleanup.sh
 ```

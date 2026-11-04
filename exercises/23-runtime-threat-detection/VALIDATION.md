@@ -55,6 +55,8 @@ Expected: `INCIDENT.md` correctly lists, in order: shell spawn → sensitive fil
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
-ssh -i $KEY ubuntu@<node-ip> 'sudo rm -f /etc/falco/rules.d/custom-rules.yaml && sudo systemctl restart falco'
+KEY=~/workspace/cka-key.pem ./cleanup.sh <node-ip>
 ```
+
+Deletes the namespace/workload and removes the custom Falco rule from the node via SSH. If you omit
+`<node-ip>`, it still cleans up the cluster objects but skips the Falco rule removal.

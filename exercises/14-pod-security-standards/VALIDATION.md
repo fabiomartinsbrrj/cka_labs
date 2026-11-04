@@ -48,7 +48,5 @@ Expected: **exit code 0**, pod created (you may see a warning printed to stderr,
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
-kubectl delete pod should-fail -n payments --ignore-not-found
-kubectl delete pod would-warn -n payments-staging --ignore-not-found
+./cleanup.sh
 ```

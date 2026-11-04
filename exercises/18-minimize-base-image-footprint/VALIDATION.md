@@ -44,5 +44,5 @@ Expected: `hello from the CKS lab`.
 ## Cleanup
 
 ```bash
-docker rmi hello-flask:insecure hello-flask:hardened
+./cleanup.sh
 ```

@@ -37,11 +37,8 @@ Expected: exit code `0` and the nginx welcome page HTML — encryption must be t
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
+./cleanup.sh
 ```
 
-Disabling WireGuard afterward (optional, cluster-wide Helm value):
-
-```bash
-cilium upgrade --set encryption.enabled=false
-```
+`cleanup.sh` deliberately leaves WireGuard encryption enabled cluster-wide (it's real hardening, not
+lab scaffolding) and just prints the command to disable it if you want to.

@@ -46,6 +46,5 @@ Expected: `0`.
 ## Cleanup
 
 ```bash
-kubectl delete secret probe-secret -n default --ignore-not-found
-kubectl delete pod audit-probe --ignore-not-found
+./cleanup.sh
 ```

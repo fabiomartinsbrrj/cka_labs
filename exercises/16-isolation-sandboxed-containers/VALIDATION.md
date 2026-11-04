@@ -39,6 +39,5 @@ Expected: the pod landed on the node you installed gVisor on, via taint + tolera
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
-kubectl delete runtimeclass gvisor-runsc
+./cleanup.sh
 ```

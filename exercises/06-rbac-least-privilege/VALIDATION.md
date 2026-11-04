@@ -28,7 +28,5 @@ Expected: all three `no`.
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
-kubectl delete clusterrole ops-bot-reader --ignore-not-found
-kubectl delete clusterrolebinding ops-bot-reader --ignore-not-found
+./cleanup.sh
 ```

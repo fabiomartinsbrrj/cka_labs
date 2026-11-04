@@ -40,5 +40,5 @@ Expected: the deny-IMDS policy applies cluster-wide except for your allowlisted 
 ## Cleanup
 
 ```bash
-kubectl delete pod metadata-probe --ignore-not-found
+./cleanup.sh
 ```

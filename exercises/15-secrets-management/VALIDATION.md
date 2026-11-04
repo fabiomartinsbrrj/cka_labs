@@ -58,5 +58,5 @@ Expected: **no match** — if `SuperSecret123!` shows up readable in the hexdump
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
+./cleanup.sh
 ```

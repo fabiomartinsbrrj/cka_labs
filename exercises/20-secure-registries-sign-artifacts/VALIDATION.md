@@ -42,6 +42,5 @@ Expected: **non-zero exit code**, and the rejection message references your poli
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
-kubectl delete pod approved unapproved -n supply-chain-demo --ignore-not-found
+./cleanup.sh
 ```

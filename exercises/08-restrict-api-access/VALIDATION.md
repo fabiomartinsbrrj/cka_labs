@@ -44,4 +44,6 @@ test -f API-ACCESS.md && echo "present"
 
 ## Cleanup
 
-Nothing to clean up — this exercise only changes static configuration.
+```bash
+./cleanup.sh
+```

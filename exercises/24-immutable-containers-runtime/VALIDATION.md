@@ -33,5 +33,5 @@ Expected: both succeed, printing `test` — the app's legitimate write paths sti
 ## Cleanup
 
 ```bash
-kubectl delete -f setup/
+./cleanup.sh
 ```
