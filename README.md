@@ -1,4 +1,4 @@
-# CKA Study Lab - Infraestrutura AWS com Terraform
+# Kubernetes Cert Labs (CKA + CKS) - Infraestrutura AWS com Terraform
 
 Este projeto cria uma infraestrutura na AWS para estudos do Certified Kubernetes Administrator (CKA) usando Terraform. O mesmo cluster também é usado para os exercícios de CKS (Certified Kubernetes Security Specialist) — veja [`README-CKS.md`](./README-CKS.md) e a pasta [`exercises/`](./exercises/).
 

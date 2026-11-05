@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Purpose
 
-Terraform infrastructure for CKA (Certified Kubernetes Administrator) study lab on AWS. Creates EC2 instances and a Makefile-driven workflow to bootstrap a multi-node Kubernetes cluster via kubeadm + Cilium.
+Terraform infrastructure for CKA (Certified Kubernetes Administrator) and CKS (Certified Kubernetes Security Specialist) study labs on AWS. Creates EC2 instances and a Makefile-driven workflow to bootstrap a multi-node Kubernetes cluster via kubeadm + Cilium. The same cluster backs the CKS exercises in `exercises/` (see `README-CKS.md`).
 
 ## Typical Workflow
 
